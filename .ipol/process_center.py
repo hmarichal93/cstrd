@@ -13,7 +13,7 @@ def mannually(filename):
 
 def automatic(filename):
     #run automatic detection
-    os.system("$ANT_CENTER_DETECTOR/build/AntColonyPith --animated=false --input $input")
+    os.system(f"$ANT_CENTER_DETECTOR/build/AntColonyPith --animated=false --input {filename}")
 
     image_name, _ = filename.split(".")
     arr = np.loadtxt(f"{image_name}.csv",delimiter=",", dtype=str)
