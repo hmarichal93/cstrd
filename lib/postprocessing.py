@@ -772,7 +772,7 @@ def split_and_merge_chains_in_region(chains_in_region: List[ch.Chain], inward_ri
         debugging_postprocessing(debug = debug, l_ch = [inward_ring, outward_ring] + [ch_j] if ch_j is not None else [] ,
                                  l_within_chain_subset = chains_in_region,
                                  img = img,
-                                 filename = f'{save_path}/{iteration[0]}_split_chains_{ch_j.label_id if ch_j is not None else 'completed'}_end.png',
+                                 filename = f'{save_path}/{iteration[0]}_split_chains_end.png',
                                  iteration = iteration)
 
 
