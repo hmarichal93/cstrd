@@ -29,10 +29,14 @@ Default configuration files are in config/ folder.
 #### Paper    
 Algorithm 1 is implemented in the file **main.py**
 
-Algorithm 2 is implemented in the file **lib/sampling.py**
+Line 1 of Algorithm 1 is implemented in file **lib/preprocessing.py**
 
 Canny-Devernay implementation [[10](https://www.ipol.im/pub/art/2017/216/)] is in **externas/devernay_1.0**. Python
 wrapper is in **lib/canny_devernay_edge_detector.py**
+
+Line 3 of Algorithm 1 is implemented in the file **lib/filter_edges.py**
+
+Algorithm 2 is implemented in the file **lib/sampling.py**
 
 
 Algorithm 3, 4, 5 are implemented in the file **lib/merge_chains.py**

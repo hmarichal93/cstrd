@@ -308,7 +308,7 @@ def find_closest(state, ch_j, l_candidates_chi, l_no_intersection_j, ch_i, locat
                                      ch.EndPoints.B, symmetric=symmetric_check)
     debugging_chains(state, [ch_i, ch_j, ch_k_b], f'{state.path}/{state.counter}_2.png')
 
-    # Line 15. Calls Algorithm 14 in the paper
+    # Line 15.
     ch_k_a = get_closest_chain_logic(state, ch_j, l_candidates_chi, l_no_intersection_j, ch_i, location,
                                      ch.EndPoints.A, symmetric=symmetric_check)
     debugging_chains(state, [ch_i, ch_j, ch_k_a], f'{state.path}/{state.counter}_3.png')
@@ -415,7 +415,6 @@ def get_the_closest_chain_by_radial_distance_that_does_not_intersect(state: Syst
                                                                      candidate_chain: ch.Chain, M,
                                                                      l_sorted_chains_in_neighbourhood):
     """
-    Implements Algorithm 14 in the supplementary material.
     @param state: Data structure with all the information of the system
     @param ch_j: current chain
     @param ch_i: support chain
@@ -448,7 +447,6 @@ def get_closest_chain(state: SystemStatus, ch_j: ch.Chain, l_no_intersection_j: 
                       location: int, endpoint: int, M):
     """
     Search for the closest chain to ch_j that does not intersect with ch_j and met conditions.
-    Implements Algorithm 14 from the paper
     @param state: SystemStatus
     @param ch_j: source chain
     @param l_no_intersection_j: list of chains that do not intersect with ch_j. Set of candidate chains to connect with
@@ -509,7 +507,7 @@ def get_closest_chain_logic(state, ch_j, l_candidates_chi, l_no_intersection_j, 
     @param endpoint: Endpoint of ch_j that is going to be connected
     @return: closest chain, ch_k, to ch_j that met condition
     """
-    # Line 2. Algorithm 14 in the paper
+    # Line 2.
     ch_k = get_closest_chain(state, ch_j, l_no_intersection_j, ch_i, location, endpoint, state.M)
 
     # Line 3
@@ -868,7 +866,6 @@ def connectivity_goodness_condition(state: SystemStatus, ch_j: ch.Chain, candida
                                     endpoint: int) -> Tuple[bool, float]:
     """
     Check if the chain candidate_chain can be connected to the chain ch_j.
-    Implements Algorithm 15 of the paper
     @param state: system status
     @param ch_j: chain j
     @param candidate_chain: candidate chain

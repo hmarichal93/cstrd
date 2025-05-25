@@ -122,113 +122,6 @@ class Ring(Polygon):
         return image
 
 
-class DiskContext:
-    def __init__(self, l_ch_c, idx_start, save_path=None, img=None, debug=True):
-        self.l_within_chains = []
-        self.neighbourhood_size = None
-        self.debug = debug
-        self.save_path = save_path
-        self.img = img
-        self.completed_chains = [cad for cad in l_ch_c if cad.size >= cad.Nr]
-        self.completed_chains, self.poly_completed_chains = self._from_completed_chain_to_poly(
-            self.completed_chains)
-
-        self.uncompleted_chains = [cad for cad in l_ch_c if cad.size < cad.Nr]
-        self.uncompleted_polygons = self._from_uncompleted_chains_to_poly(self.uncompleted_chains)
-        self.idx = 1 if idx_start is None else idx_start
-
-    def get_inward_outward_ring(self, idx):
-        self.neighbourhood_size = 45
-        outward_ring = None
-        inward_ring = None
-        if len(self.poly_completed_chains) > idx > 0:
-            inward_ring = self.poly_completed_chains[idx - 1]
-            outward_ring = self.poly_completed_chains[idx]
-
-        return inward_ring, outward_ring
-
-    def update(self):
-        """
-        Update the context. The context is updated when the algorithm is executed over a new region.
-        Algorithm 17 in the paper.
-        :return: self.chains_in_region, self.inward_ring, self.outward_ring
-        """
-        #Line 1
-        # self.idx indicates the region to be processed at this iteration
-        inward_polygon, outward_polygon = self.get_inward_outward_ring(self.idx)
-
-        # Line 2 Search for chains within region. self.uncompleted_polygons are the l_ch_p chains coded
-        # as shapely polygons
-        l_uncomplete_polygons_within_region = search_for_polygons_within_region(self.uncompleted_polygons,
-                                                                                outward_polygon,
-                                                                                inward_polygon)
-
-        # Line 3 Convert shapely polygons to chain objects (from_polygons_to_chains). Self.uncompleted_polygon
-        # are the shapely polygons that are not closed. self.uncompleted_chains are the chains that are not closed. Both
-        # element refers to the same chain but coded in different ways.
-        self.l_within_chains = from_shapely_to_chain(self.uncompleted_polygons,
-                                                     self.uncompleted_chains,
-                                                     l_uncomplete_polygons_within_region)
-
-        self.inward_ring, self.outward_ring = self._from_shapely_ring_to_chain(inward_polygon,
-                                                                               outward_polygon)
-
-        # output: self.chains_in_region, self.inward_ring, self.outward_ring
-        return
-    def exit(self):
-        self.idx += 1
-        if self.idx >= len(self.completed_chains):
-            return True
-
-        return False
-
-    def drawing(self, iteration, suffix = "_region_initial.png"):
-        ch.visualize_selected_ch_and_chains_over_image_(
-            self.l_within_chains + [chain for chain in [self.inward_ring, self.outward_ring] if chain is not None],
-            [], img=self.img, filename=f'{self.save_path}/{iteration}{suffix}')
-
-    def _from_shapely_ring_to_chain(self, poly_ring_inward, poly_ring_outward):
-        inward_chain_ring = None
-        outward_chain_ring = None
-        if poly_ring_inward is not None:
-            inward_chain_ring = self.completed_chains[self.poly_completed_chains.index(
-                poly_ring_inward)]
-
-        if poly_ring_outward is not None:
-            outward_chain_ring = self.completed_chains[
-                self.poly_completed_chains.index(poly_ring_outward)]
-        return inward_chain_ring, outward_chain_ring
-
-    def sort_list_by_index_array(self, indexes, list_position):
-        Z = [list_position[position] for position in indexes]
-        return Z
-
-    def sort_shapely_list_and_chain_list(self, cadena_list, shapely_list):
-        idx_sort = [i[0] for i in sorted(enumerate(shapely_list), key=lambda x: x[1].area)]
-        shapely_list = self.sort_list_by_index_array(idx_sort, shapely_list)
-        cadena_list = self.sort_list_by_index_array(idx_sort, cadena_list)
-        return cadena_list, shapely_list
-
-    def _from_completed_chain_to_poly(self, completed_chain):
-        poly_completed_chains = []
-        for chain in completed_chain:
-            ring = Ring(chain, id=chain.id)
-            poly_completed_chains.append(ring)
-
-        completed_chain, poly_completed_chains = self.sort_shapely_list_and_chain_list(completed_chain,
-                                                                                       poly_completed_chains)
-
-        return completed_chain, poly_completed_chains
-
-    def _from_uncompleted_chains_to_poly(self, uncompleted_chain):
-        uncompleted_chain_shapely = []
-        for chain in uncompleted_chain:
-            lista_pts = [Point(punto.y, punto.x) for punto in chain.sort_dots()]
-            uncompleted_chain_shapely.append(LineString(lista_pts))
-
-        return uncompleted_chain_shapely
-
-
 class ChainsBag:
     def __init__(self, inward_chain_set):
         """
@@ -418,7 +311,7 @@ def select_no_intersection_chain_at_endpoint(ch1_sub: ch.Chain, ch2_sub: ch.Chai
 
 def split_intersecting_chains(direction, l_filtered_chains, ch_j, debug_params = None, save_path = None):
     """
-    Split intersecting chains. Implements Algorithm 18 in the supplementary material.
+    Split intersecting chains.
     @param direction: endpoint direction for split chains
     @param l_filtered_chains: list of chains to be split
     @param ch_j: source chain
