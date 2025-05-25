@@ -1,6 +1,8 @@
 import numpy as np
 import argparse
 import cv2
+import os
+
 
 def mannually(filename):
     f = open(filename, "r")
@@ -10,6 +12,9 @@ def mannually(filename):
     return float(y),float(x)
 
 def automatic(filename):
+    #run automatic detection
+    os.system("$ANT_CENTER_DETECTOR/build/AntColonyPith --animated=false --input $input")
+
     image_name, _ = filename.split(".")
     arr = np.loadtxt(f"{image_name}.csv",delimiter=",", dtype=str)
     y = arr[1][0]

@@ -22,7 +22,6 @@ if [ -s inpainting_data_0.txt ]; then
 
 else
   # File is  empty
-  $ANT_CENTER_DETECTOR/build/AntColonyPith --animated=false --input $input #2> demo_failure.txt
   stdout=$(python $BIN/.ipol/process_center.py --input $input --type 1)
 
 fi
