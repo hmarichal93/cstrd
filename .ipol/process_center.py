@@ -21,15 +21,15 @@ if __name__=="__main__":
     parser.add_argument("--input", type=str, required=True)
     parser.add_argument("--type", type=int, required=True, default=0)
     args = parser.parse_args()
-    if args.type == 0:
-        y,x = mannually(args.input)
-    else:
-        try:
+    try:
+        if args.type == 0:
+            y,x = mannually(args.input)
+        else:
             y,x = automatic(args.input)
-        except:
-            #write to file
-            with open("demo_failure.txt", "w") as f:
-                f.write("Automatic Pith detector failed")
-            y,x = 0,0
+    except:
+        #write to file
+        with open("demo_failure.txt", "w") as f:
+            f.write("Pith detection failed")
+        y,x = 0,0
     print(f"{int(y)}")
     print(f"{int(x)}")

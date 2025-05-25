@@ -22,7 +22,7 @@ if [ -s inpainting_data_0.txt ]; then
 
 else
   # File is  empty
-  $ANT_CENTER_DETECTOR/build/AntColonyPith --animated=false --input $input
+  $ANT_CENTER_DETECTOR/build/AntColonyPith --animated=false --input $input 2> demo_failure.txt
   stdout=$(python $BIN/.ipol/process_center.py --input $input --type 1)
 
 fi
@@ -30,5 +30,6 @@ Cx=$(echo $stdout | awk '{print $1}')
 Cy=$(echo $stdout | awk '{print $2}')
 
 # Execute algorithm
+python remove_background.py --input $input
 python $BIN/main.py --input $input --cx $Cx --cy $Cy --root $BIN --output_dir ./  --th_high $th_high --th_low $th_low --alpha $alpha --hsize $hsize --wsize $wsize --sigma $sigma --save_imgs 1
 
