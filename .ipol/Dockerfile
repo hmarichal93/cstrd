@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y $(cat packages.txt) && rm -rf /var/lib/
 COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt && rm requirements.txt
 
+#remove background
+RUN git clone https://github.com/hmarichal93/uruDendro.git &&  cd uruDendro && git lfs pull && python setup.py install
+RUN pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
 # copy the code to $bin
 ENV bin /workdir/bin/

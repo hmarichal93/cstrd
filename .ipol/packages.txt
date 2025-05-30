@@ -2,3 +2,5 @@ glibc-source
 libgeos-dev
 cmake
 libopencv-dev
+git
+git-lfs
