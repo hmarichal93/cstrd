@@ -12,7 +12,7 @@ def posprocess(output_path):
     This function can be extended to include additional postprocessing steps if needed.
     """
     img = load_image(output_path)
-    square_width_px = 50
+    square_width_px = 5
     img[:, 0:square_width_px] = [255, 255, 255]  # White square in the top-left corner
     img[:, -square_width_px:] = [255, 255, 255]  # White square in the top-right corner
     img[0:square_width_px, :] = [255, 255, 255]  # White square in the top-left corner
