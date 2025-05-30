@@ -89,10 +89,6 @@ def find_border_contour(img):
     @return: disk border contour
     """
     contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    #draw contour over image
-    img_debug = img.copy()
-    cv2.drawContours(img_debug, contours, -1, (0, 255, 0), 3)
-    cv2.imwrite('contours.png', img_debug)
     # 1.0 Perimeter of the image. Used to discard contours that are similar in size to the image perimeter.
     perimeter_image = 2 * img.shape[0] + 2 * img.shape[1]
     # 1.1 Error threshold. Used to discard contours that are similar in size to the image perimeter. For us, similar
