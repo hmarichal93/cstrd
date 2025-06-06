@@ -141,6 +141,8 @@ def get_border_curve(img, l_ch_f):
     mask = thresholding(mask, 127)
     mask = padding_mask(mask)
     border_contour = find_border_contour(mask)
+    if border_contour is None:
+        return None
     border_contour = convex_hull(border_contour)
     border_curve = contour_to_curve(border_contour, len(l_ch_f))
     return border_curve
@@ -214,7 +216,8 @@ def filter_edges(m_ch_e, cy, cx, Gx, Gy, alpha, im_pre):
     X_edges_filtered = filter_edges_by_threshold(m_ch_e, theta, alpha)
     l_ch_f = convert_masked_pixels_to_curves(X_edges_filtered)
     border_curve = get_border_curve(im_pre, l_ch_f)
-    l_ch_f.append(border_curve)
+    if border_curve is not None:
+        l_ch_f.append(border_curve)
 
     return l_ch_f
 
