@@ -1,5 +1,8 @@
 # CS-TRD: a Cross Sections Tree Ring Detection method
 
+**Accepted at Image Processing On Line (IPOL) 2025**.
+
+
 Repository for the paper "CS-TRD: a Cross Sections Tree Ring Detection method". 
 
 
