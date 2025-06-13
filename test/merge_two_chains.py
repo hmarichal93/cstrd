@@ -1,7 +1,7 @@
 import numpy as np
 
 import lib.chain as ch
-from lib.connect_chains import merge_two_chains, update_chain_list, SystemStatus, compute_intersection_matrix
+from lib.merge_chains import merge_two_chains, update_chain_list, SystemStatus, compute_intersection_matrix
 from lib.interpolation_nodes import from_polar_to_cartesian
 def create_chain(ch_j_id, Nr, center, img_height, img_width, chain_type, nodes_list):
     ch_j = ch.Chain(ch_j_id, Nr, center, img_height, img_width, type=chain_type)
@@ -111,7 +111,7 @@ def test_update_chain_list():
     l_nodes_s = [node for chain in l_ch_s for node in chain.l_nodes]
     nr = 360
     cy, cx = ch_i.center
-    M = compute_intersection_matrix(l_ch_s, l_nodes_s, Nr=nr)
+    M = compute_intersection_matrix(l_nodes_s, Nr=nr)
     state = SystemStatus(l_ch_s, l_nodes_s, M, cy, cx, Nr=nr, save='test/', img=image)
     print("M", M)
     print("ch_k", ch_k)
