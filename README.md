@@ -14,7 +14,7 @@ ArXiv paper: [ArXiv][link_arxiv_paper].
 ![Python Version](https://img.shields.io/badge/python-3.11-blue)
 
 
-[link_ipol_paper]: https://ipolcore.ipol.im/demo/clientApp/demo.html?id=77777000390
+[link_ipol_paper]: https://ipolcore.ipol.im/demo/clientApp/demo.html?id=485
 [link_urudendro]: https://iie.fing.edu.uy/proyectos/madera/
 [link_arxiv_paper]: https://doi.org/10.48550/arXiv.2305.10809
 ***
