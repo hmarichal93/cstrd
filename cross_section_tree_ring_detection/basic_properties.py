@@ -13,10 +13,11 @@ import matplotlib.pyplot as plt
 import cv2
 from typing import List
 
+
 from cross_section_tree_ring_detection.drawing import Color, Drawing
 from cross_section_tree_ring_detection.interpolation_nodes import generate_nodes_list_between_two_radial_distances
 import cross_section_tree_ring_detection.chain as ch
-from cross_section_tree_ring_detection.interpolation_nodes import domain_interpolation
+from cross_section_tree_ring_detection.interpolation_nodes import interpolate_nodes
 
 def draw_segment_between_nodes(pto1, pto2, img, color=(0, 255, 0), thickness=2):
     pts = np.array([[pto1.y, pto1.x], [pto2.y, pto2.x]], dtype=int)
@@ -234,7 +235,7 @@ def generate_virtual_nodes_without_support_chain(ch_1, ch_2, endpoint):
 
     virtual_nodes = []
     support_chain = None
-    domain_interpolation(support_chain, ch1_border, ch2_border, endpoint, ch_1, virtual_nodes)
+    interpolate_nodes(support_chain, ch1_border, ch2_border, endpoint, ch_1, virtual_nodes)
     return virtual_nodes
 
 def regularity_of_the_derivative(state, ch_j, ch_k, endpoint_j, node_list, ch_j_nodes, ch_k_nodes, th_deriv=1,
@@ -277,7 +278,7 @@ def generate_virtual_nodes_between_two_chains(src_chain, dst_chain, support_chai
     cad1_endpoint = src_chain.extA if endpoint == ch.EndPoints.A else src_chain.extB
     cad2_endpoint = dst_chain.extB if endpoint == ch.EndPoints.A else dst_chain.extA
 
-    domain_interpolation(support_chain, cad1_endpoint, cad2_endpoint, endpoint, src_chain, virtual_nodes)
+    interpolate_nodes(support_chain, cad1_endpoint, cad2_endpoint, endpoint, src_chain, virtual_nodes)
 
     return virtual_nodes
 

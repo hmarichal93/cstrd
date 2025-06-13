@@ -6,7 +6,7 @@ from pathlib import Path
 from shapely.geometry import Polygon, LineString
 
 def test_split_and_connect_neighbouring_chains(data):
-    l_within_chains = data['l_within_chains']
+    l_within_chains = data['chains_in_region']
     l_within_nodes = data['l_within_nodes']
     ch_j = data['ch_j']
     endpoint = data['endpoint']
@@ -30,7 +30,7 @@ def from_chain_to_shapelly(chain,type=1):
     return Polygon(points)
 
 def test_split_and_connect(data):
-    l_within_chains = data['l_within_chains']
+    l_within_chains = data['chains_in_region']
     #l_within_nodes = data['l_within_nodes']
     #ch_j = data['ch_j']
     #endpoint = data['endpoint']
@@ -67,7 +67,7 @@ def test_split_and_connect(data):
     return
 
 def test_split_and_connect_2(data):
-    l_within_chains = data['l_within_chains']
+    l_within_chains = data['chains_in_region']
     #l_within_nodes = data['l_within_nodes']
     #ch_j = data['ch_j']
     #endpoint = data['endpoint']

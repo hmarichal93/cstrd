@@ -89,9 +89,7 @@ def find_border_contour(img):
     @return: disk border contour
     """
     contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    #draw contour over image
-    img_debug = img.copy()
-    cv2.drawContours(img_debug, contours, -1, (0, 255, 0), 3)
+
     # 1.0 Perimeter of the image. Used to discard contours that are similar in size to the image perimeter.
     perimeter_image = 2 * img.shape[0] + 2 * img.shape[1]
     # 1.1 Error threshold. Used to discard contours that are similar in size to the image perimeter. For us, similar
@@ -133,25 +131,20 @@ def convex_hull(contour):
 
 def get_border_curve(img, l_ch_f):
     """
-    Get disk border border_curve of the image. Implements Algorithm 10 in the paper
+    Get disk border border_curve of the image.
     @param img: segmented gray image
     @param l_ch_f: list of curves
     @return: border object border_curve
 
     """
-    # Line 1
     mask = mask_background(img)
-    # Line 2
     mask = blur(mask)
-    # Line 3
     mask = thresholding(mask, 127)
-    # Line 4
     mask = padding_mask(mask)
-    # Line 5
     border_contour = find_border_contour(mask)
-    # Line 6
+    if border_contour is None:
+        return None
     border_contour = convex_hull(border_contour)
-    # Line 7
     border_curve = contour_to_curve(border_contour, len(l_ch_f))
     return border_curve
 
@@ -205,8 +198,7 @@ def filter_edges(m_ch_e, cy, cx, Gx, Gy, alpha, im_pre):
     """
     Edge detector find three types of edges: early wood transitions, latewood transitions and radial edges produced by
     cracks and fungi. Only early wood edges are the ones that forms the rings. In other to filter the other ones
-    collineary with the ray direction is computed and filter depending on threshold (alpha).  Implements Algorithm 4 in
-    the supplementary material
+    collineary with the ray direction is computed and filter depending on threshold (alpha).
     @param m_ch_e: devernay curves in matrix format
     @param cy: pith y's coordinate
     @param cx: pith x's coordinate
@@ -217,23 +209,16 @@ def filter_edges(m_ch_e, cy, cx, Gx, Gy, alpha, im_pre):
     @return:
     - l_ch_f: filtered devernay curves
     """
-    # Line 1 change reference axis
     Xb = change_reference_axis(m_ch_e, cy, cx)
-    # Line 2 get normalized gradient at each edge
     G = get_gradient_vector_for_each_edge_pixel(m_ch_e, Gx, Gy)
-    # Line 3 and 4 Normalize gradient and rays
     Xb_normalized = normalized_row_matrix(Xb.T)
     G_normalized = normalized_row_matrix(G)
-    # Line 5 Compute angle between gradient and edges
     theta = compute_angle_between_gradient_and_edges(Xb_normalized, G_normalized)
-    # Line 6 filter pixels by threshold
     X_edges_filtered = filter_edges_by_threshold(m_ch_e, theta, alpha)
-    # Line 7 Convert masked pixel to object curve
     l_ch_f = convert_masked_pixels_to_curves(X_edges_filtered)
-    # Line 8  Border disk is added as a curve
     border_curve = get_border_curve(im_pre, l_ch_f)
-    # Line 9
-    l_ch_f.append(border_curve)
+    if border_curve is not None:
+        l_ch_f.append(border_curve)
 
     return l_ch_f
 

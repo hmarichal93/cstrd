@@ -1,9 +1,10 @@
 # CS-TRD: a Cross Sections Tree Ring Detection method
 
+**Accepted at Image Processing On Line (IPOL) 2025**.
+
 Repository for the paper "CS-TRD: a Cross Sections Tree Ring Detection method". 
 
 
-Submitted on 13/05/2023. Last Revision on 21/01/2025. 
 Demo: [DEMO][link_ipol_paper].
 
 UruDendro ImageSet: [UruDendro][link_urudendro].
@@ -12,19 +13,18 @@ ArXiv paper: [ArXiv][link_arxiv_paper].
 ***
 ![Python Version](https://img.shields.io/badge/python-3.11-blue)
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=581191784&skip_quickstart=true&machine=basicLinux32gb&geo=UsEast)
-
 
 [link_ipol_paper]: https://ipolcore.ipol.im/demo/clientApp/demo.html?id=77777000390
 [link_urudendro]: https://iie.fing.edu.uy/proyectos/madera/
 [link_arxiv_paper]: https://doi.org/10.48550/arXiv.2305.10809
 ***
-![F03d_compare.jpg](assets%2FF03d_compare.jpg)
+![F03d_compare.jpg](assets/F03d_compare.jpg)
 
 
 ***
 Version 1.0
-Last update: 03/12/2024
+Last update: 23/05/2025
+
 Authors: 
 -	Henry Marichal, henry.marichal@fing.edu.uy
 -   Diego Passarella, diego.passarella@cut.edu.uy
@@ -40,24 +40,21 @@ Default configuration files are in config/ folder.
 #### Paper    
 Algorithm 1 is implemented in the file **main.py**
 
+Line 1 of Algorithm 1 is implemented in file **lib/preprocessing.py**
+
 Canny-Devernay implementation [[10](https://www.ipol.im/pub/art/2017/216/)] is in **externas/devernay_1.0**. Python
 wrapper is in **lib/canny_devernay_edge_detector.py**
 
-Algorithm 2, 3 and 4 are implemented in the file **lib/connect_chains.py**
+Line 3 of Algorithm 1 is implemented in the file **lib/filter_edges.py**
 
-#### Supplementary Material
+Algorithm 2 is implemented in the file **lib/sampling.py**
 
-Algorithm 1, 2 and 3 are implemented in the file **lib/preprocessing.py**
 
-Algorithm 4 and 5 are implemented in the file **lib/filter_edges.py** 
+Algorithm 3, 4, 5 are implemented in the file **lib/merge_chains.py**
 
-Algorithm 6 is implemented in the file **lib/sampling.py**
+Algorithm 6 is implemented in the file **lib/basic_properties.py**
 
-Algorithm 7, 8, 9, 10,  12, 13, 14 are implemented in the file **lib/connect_chains.py**
-
-Algorithm 11 is implemented in the file **lib/basic_properties.py**
-
-Algorithm 15, 16, 17 and 18 are implemented in the file **lib/postprocessing.py**
+Algorithm 7 is implemented in the file **lib/postprocessing.py**
 
 ## Installation
 ### Setup environment
