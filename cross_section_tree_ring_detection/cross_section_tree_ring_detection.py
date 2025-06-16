@@ -1,4 +1,7 @@
 import time
+import os
+from pathlib import Path
+from argparse import Namespace
 
 from cross_section_tree_ring_detection.preprocessing import preprocessing
 from cross_section_tree_ring_detection.canny_devernay_edge_detector import canny_devernay_edge_detector
@@ -6,7 +9,9 @@ from cross_section_tree_ring_detection.filter_edges import filter_edges
 from cross_section_tree_ring_detection.sampling import sampling_edges
 from cross_section_tree_ring_detection.merge_chains import merge_chains
 from cross_section_tree_ring_detection.postprocessing import postprocessing
-from cross_section_tree_ring_detection.utils import chain_2_labelme_json, save_config, saving_results
+from cross_section_tree_ring_detection.utils import (chain_2_labelme_json, save_config,
+                                                     saving_results)
+from cross_section_tree_ring_detection.io import load_json
 
 def TreeRingDetection(im_in, cy, cx, sigma, th_low, th_high, height, width, alpha, nr, mc,
                       debug= False, debug_image_input_path=None, debug_output_dir=None):
@@ -36,6 +41,11 @@ def TreeRingDetection(im_in, cy, cx, sigma, th_low, th_high, height, width, alph
      - l_ch_p: Debug Output. Intermediate results. Chain lists after posprocessing stage.
     """
     to = time.time()
+    args = Namespace(cy=cy, cx=cx, sigma=sigma, th_low=th_low, th_high=th_high,
+                hsize=height, wsize=width, alpha=alpha, nr=nr,
+                min_chain_length=mc, debug=debug, output_dir=debug_output_dir)
+
+    save_config(args,  debug_output_dir)
 
     # Line 1 Preprocessing image. Algorithm 1 in the supplementary material. Image is  resized, converted to gray
     # scale and equalized

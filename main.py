@@ -18,7 +18,7 @@ from cross_section_tree_ring_detection.io import load_image
 
 
 def main(args):
-    save_config(args, args.root, args.output_dir)
+    save_config(args, args.output_dir)
     if not Path(args.input).exists():
         raise FileNotFoundError(f"Input image {args.input} not found")
 

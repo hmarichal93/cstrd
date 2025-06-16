@@ -3,25 +3,32 @@ from setuptools import setup
 from setuptools.command.develop import develop
 from setuptools.command.install import install
 from subprocess import check_call
+import os
+from pathlib import Path
 
+def pre_install_devernay():
+    check_call("cd ./externas/devernay_1.0 && make clean && make", shell=True)
+    check_call("./install.sh", shell=True)
 
 class PostDevelopCommand(develop):
     """Post-installation for development mode."""
     def run(self):
-        check_call("cd ./externas/devernay_1.0 && make clean && make", shell=True)
+        pre_install_devernay()
         develop.run(self)
+
 
 class PostInstallCommand(install):
     """Post-installation for installation mode."""
     def run(self):
-        check_call("cd ./externas/devernay_1.0 && make clean && make", shell=True)
+        pre_install_devernay()
         install.run(self)
+
 
 setup(
     name='cross_section_tree_ring_detection',
     version='1.0.0',
     description='Cross section tree ring detection method over RGB images',
-    url='https://github.com/hmarichal93/cstrd_ipol',
+    url='https://github.com/hmarichal93/cstrd',
     author='Henry Marichal',
     author_email='hmarichal93@gmail.com',
     license='MIT',
