@@ -20,40 +20,31 @@ from cross_section_tree_ring_detection.preprocessing import resize
 
 
 
-def save_config(args, root_path, output_dir):
-    config = load_config()
+def save_config(args, output_dir, repo_path="./"):
 
-    config['result_path'] = output_dir
+    config = load_config()
+    config['result_path'] = str(output_dir)
 
     if args.nr:
         config['nr'] = args.nr
-
     if args.hsize and args.wsize:
-        if args.hsize>0 and args.wsize>0:
+        if args.hsize > 0 and args.wsize > 0:
             config['resize'] = [args.hsize, args.wsize]
-
     if args.min_chain_length:
         config["min_chain_length"] = args.min_chain_length
-
-    if args.edge_th:
-        config["edge_th"] = args.edge_th
-
+    if args.alpha:
+        config["alpha"] = args.alpha
     if args.sigma:
         config['sigma'] = args.sigma
-
     if args.th_high:
         config['th_high'] = args.th_high
-
     if args.th_low:
         config['th_low'] = args.th_low
-
     if args.debug:
         config['debug'] = True
 
-    config['devernay_path'] = str(Path(root_path) / "externas/devernay_1.0")
-
-    write_json(config, Path(root_path) / 'config/general.json')
-
+    config['devernay_path'] = str(Path(repo_path) / "externas/devernay_1.0")
+    write_json(config, Path(repo_path) / 'config/general.json')
     return 0
 def saving_results( res, output_dir, save_imgs=True):
     im_seg, im_pre, ch_e, ch_f, ch_s, ch_c, ch_p, rings = res

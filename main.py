@@ -11,13 +11,14 @@ You should have received a copy of the GNU Affero General Public License along w
 """
 from pathlib import Path
 
+
 from cross_section_tree_ring_detection.cross_section_tree_ring_detection import TreeRingDetection
 from cross_section_tree_ring_detection.utils import save_config, saving_results
 from cross_section_tree_ring_detection.io import load_image
 
 
 def main(args):
-    save_config(args, args.root, args.output_dir)
+    save_config(args, args.output_dir)
     if not Path(args.input).exists():
         raise FileNotFoundError(f"Input image {args.input} not found")
 
@@ -25,9 +26,9 @@ def main(args):
     Path(args.output_dir).mkdir(exist_ok=True, parents=True)
 
     res = TreeRingDetection(im_in, args.cy, args.cx, args.sigma, args.th_low, args.th_high, args.hsize, args.wsize,
-                            args.edge_th, args.nr, args.min_chain_length, args.debug, args.input, args.output_dir)
-
+                            args.alpha, args.nr, args.min_chain_length, args.debug, args.input, args.output_dir)
     saving_results(res, args.output_dir, args.save_imgs)
+
 
     return 0
 
@@ -44,20 +45,17 @@ if __name__ == "__main__":
     parser.add_argument("--nr", type=int, required=False,default=360)
     parser.add_argument("--hsize", type=int, required=False, default=0)
     parser.add_argument("--wsize", type=int, required=False, default=0)
-    parser.add_argument("--edge_th", type=int, required=False, default=30)
-    parser.add_argument("--th_high", type=int, required=False, default=20)
-    parser.add_argument("--th_low", type=int, required=False, default=5)
+    parser.add_argument("--alpha", type=int, required=False, default=30)
+    parser.add_argument("--th_high", type=float, required=False, default=20)
+    parser.add_argument("--th_low", type=float, required=False, default=5)
     parser.add_argument("--min_chain_length", type=int, required=False, default=2)
     parser.add_argument("--debug", type=int, required=False)
 
     args = parser.parse_args()
-    try:
-        main(args)
 
-    except Exception as e:
-        #write to file
-        with open("demo_failure.txt", "w") as f:
-            f.write(str(e))
+    main(args)
+
+
 
 
 

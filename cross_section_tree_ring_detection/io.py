@@ -17,11 +17,9 @@ def load_image(image_name):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     return img
 
-def load_config(default=True):
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    return load_json(f"{dir_path}/../config/default.json") if default else load_json(f"{dir_path}/../config/general.json")
-
-
+def load_config(default=True) -> dict:
+    config_path = os.path.join("./config", "default.json" if default else "general.json")
+    return load_json(config_path)
 def load_json(filepath: str) -> dict:
     """
     Load json utility.

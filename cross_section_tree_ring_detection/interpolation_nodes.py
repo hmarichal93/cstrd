@@ -123,8 +123,8 @@ def compute_radial_ratio(cadena_inferior, cadena_superior, dot):
     return r1_inferior / (r1_superior + r1_inferior)
 
 
-def interpolate_in_angular_domain_via_2_chains(inward_support_chain, outward_support_chain, ch1_endpoint, ch2_endpoint,
-                                               endpoint, ch1, node_list):
+def interpolate_nodes_two_chains(inward_support_chain, outward_support_chain, ch1_endpoint, ch2_endpoint,
+                                 endpoint, ch1, node_list):
     """
     Interpolate between ch_i endpoints via two support chains.
     @param inward_support_chain:
@@ -161,8 +161,32 @@ def interpolate_in_angular_domain_via_2_chains(inward_support_chain, outward_sup
     return
 
 
-def domain_interpolation(ch_i: ch.Chain, ch_j_endpoint: ch.Node, ch_k_endpoint: ch.Node, endpoint: int, ch_j: ch.Chain,
-                         l_nodes: List[ch.Node]):
+
+def interpolate_nodes_given_chains(ch_i, ch_j_endpoint, ch_k_endpoint, endpoint, ch_j, support2=None):
+    """
+    Interpolate between two chains using a support chain or two support chains. Logic used in the Algorithms 4 and 5 in
+    the paper.
+    :param ch_i: support chain
+    :param ch_j_endpoint: source chain endpoint
+    :param ch_k_endpoint: destination chain endpoint
+    :param endpoint: endpoint type (A or B)
+    :param ch_j: source chain
+    :param support2: optional second support chain
+    :return: interpolated nodes
+    """
+    interpolated = []
+    if support2:
+        interpolate_nodes_two_chains(ch_i, support2, ch_j_endpoint, ch_k_endpoint, endpoint,
+                                     ch_j, interpolated)
+
+    else:
+        interpolate_nodes(ch_i, ch_j_endpoint, ch_k_endpoint, endpoint, ch_j, interpolated)
+
+    return interpolated
+
+
+def interpolate_nodes(ch_i: ch.Chain, ch_j_endpoint: ch.Node, ch_k_endpoint: ch.Node, endpoint: int, ch_j: ch.Chain,
+                      l_nodes: List[ch.Node]):
     """
     Interpolate between endpoint ch_j_endpoint and ch_k_endpoint using ch_i as support ch_j. Ch_j is the source ch_j to
     be connected
@@ -216,8 +240,8 @@ def complete_chain_using_2_support_ring(inward_chain, outward_chain, chain):
     ch2_endpoint = chain.extA
     endpoint = ch.EndPoints.B
     generated_nodes = []
-    interpolate_in_angular_domain_via_2_chains(inward_chain, outward_chain, ch1_endpoint, ch2_endpoint, endpoint, chain,
-                                               generated_nodes)
+    interpolate_nodes_two_chains(inward_chain, outward_chain, ch1_endpoint, ch2_endpoint, endpoint, chain,
+                                 generated_nodes)
 
     change_border = chain.add_nodes_list(generated_nodes)
 
@@ -229,7 +253,7 @@ def complete_chain_using_support_ring(support_chain, ch1):
     ch2_endpoint = ch1.extA
     endpoint = ch.EndPoints.B
     generated_list_nodes = []
-    domain_interpolation(support_chain, ch1_endpoint, ch2_endpoint, endpoint, ch1, generated_list_nodes)
+    interpolate_nodes(support_chain, ch1_endpoint, ch2_endpoint, endpoint, ch1, generated_list_nodes)
     change_border = ch1.add_nodes_list(generated_list_nodes)
 
     return change_border
@@ -252,8 +276,8 @@ def connect_2_chain_via_inward_and_outward_ring(outward_ring, inward_ring, ch_j,
 
     # 1.0
     generated_node_list = []
-    interpolate_in_angular_domain_via_2_chains(inward_ring, outward_ring, ch1_endpoint, ch2_endpoint, endpoint,
-                                               ch_j, generated_node_list)
+    interpolate_nodes_two_chains(inward_ring, outward_ring, ch1_endpoint, ch2_endpoint, endpoint,
+                                 ch_j, generated_node_list)
     l_nodes_c += generated_node_list
 
     # 2.0
